@@ -9,6 +9,7 @@ servers:
   - url: https://example.com
     description: Local server
 paths:
+  # Register and login routes using the default email and password, social accounts, and magic links
   /auth/register:
     post:
       summary: Register a new user
@@ -131,6 +132,8 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
+
+  # payment methods and routes
   /payments/stripe:
     post:
       summary: Process payment via Stripe
@@ -232,6 +235,85 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
+  /content:
+    post:
+      summary: Create content
+      operationId: createContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+      responses:
+        '201':
+          description: Content created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+    get:
+      summary: Get all content
+      operationId: getAllContent
+      responses:
+        '200':
+          description: Content retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    body:
+                      type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /content/{contentId}:
+    get:
+      summary: Get content by ID
+      operationId: getContentById
+      parameters:
+        - name: contentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Content retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  body:
+                    type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Content not found
+
+  # Add a new path for getting chart data
   /chart:
     get:
       summary: Get chart data
