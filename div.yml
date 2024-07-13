@@ -39,6 +39,54 @@ paths:
                   $ref: "#/components/schemas/UserdataArr"
         "404":
           description: User not found
+
+  /users/{userId}/export:
+    post:
+      summary: Request a data export
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the user requesting the data export
+      responses:
+        "202":
+          description: Data export requested successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportRequestResponse"
+        "400":
+          description: Invalid user ID
+        "404":
+          description: User not found
+  /users/{userId}/export/{exportId}:
+    get:
+      summary: Download the exported data
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+        - name: exportId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the export request
+      responses:
+        "200":
+          description: Export file ready for download
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportFile"
+        "404":
+          description: Export file not found
+
   /blogs:
     get:
       summary: "View first 20 blog posts"
@@ -183,52 +231,52 @@ paths:
         "404":
           description: Invite not found
 
-  /users/{userId}/export:
-    post:
-      summary: Request a data export
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The ID of the user requesting the data export
-      responses:
-        "202":
-          description: Data export requested successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ExportRequestResponse"
-        "400":
-          description: Invalid user ID
-        "404":
-          description: User not found
-  /users/{userId}/export/{exportId}:
-    get:
-      summary: Download the exported data
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The ID of the user
-        - name: exportId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The ID of the export request
-      responses:
-        "200":
-          description: Export file ready for download
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ExportFile"
-        "404":
-          description: Export file not found
+  # /users/{userId}/export:
+  #   post:
+  #     summary: Request a data export
+  #     parameters:
+  #       - name: userId
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #         description: The ID of the user requesting the data export
+  #     responses:
+  #       "202":
+  #         description: Data export requested successfully
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/ExportRequestResponse"
+  #       "400":
+  #         description: Invalid user ID
+  #       "404":
+  #         description: User not found
+  # /users/{userId}/export/{exportId}:
+  #   get:
+  #     summary: Download the exported data
+  #     parameters:
+  #       - name: userId
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #         description: The ID of the user
+  #       - name: exportId
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #         description: The ID of the export request
+  #     responses:
+  #       "200":
+  #         description: Export file ready for download
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/ExportFile"
+  #       "404":
+  #         description: Export file not found
 
 components:
   schemas:
