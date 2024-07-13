@@ -59,7 +59,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/UpdateUserProfile"
       responses:
@@ -239,6 +239,125 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /messaging/email:
+    post:
+      summary: Send email using default template and background process
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmailMessage"
+      responses:
+        200:
+          description: Email sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailSentResponse"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /notifications:
+    post:
+      summary: Send a notification
+      description: Endpoint to send notifications via email or other channels.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+      responses:
+        200:
+          description: Notification sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationResponse"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /cookies/gdpr:
+    get:
+      summary: Get GDPR cookies information
+      description: Retrieve information about GDPR compliance and cookies usage.
+      responses:
+        200:
+          description: GDPR cookies information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GDPRCookiesResponse"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /waitlist:
+    post:
+      summary: Join the waitlist
+      description: Register a user to a waitlist for a service or feature.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                service:
+                  type: string
+              required:
+                - email
+                - service
+      responses:
+        200:
+          description: User added to the waitlist
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WaitlistResponse"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /superadmin/email-templates:
+    get:
+      summary: Get email templates
+      description: Retrieve email templates managed by the Superadmin.
+      responses:
+        200:
+          description: Email templates retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailTemplatesResponse"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     ApiResponse:
@@ -278,6 +397,9 @@ components:
           type: string
         phone:
           type: string
+        photoUrl:
+          type: string
+          format: binary
 
     UpdateSettings:
       type: object
@@ -306,6 +428,9 @@ components:
                   type: string
                 phone:
                   type: string
+                photoUrl:
+                  type: string
+                  format: binary
 
     OrganisationDetails:
       type: object
@@ -425,6 +550,90 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/User"
+
+    EmailMessage:
+      type: object
+      properties:
+        to:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+
+    EmailSentResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        messageId:
+          type: string
+
+    WaitlistRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+
+    WaitlistResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+
+    EmailTemplatesListResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          templateId:
+            type: string
+          name:
+            type: string
+          description:
+            type: string
+
+    NotificationResponse:
+      type: object
+      properties:
+        notifications:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              message:
+                type: string
+              timestamp:
+                type: string
+
+    GDPRCookiesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+
+    EmailTemplatesResponse:
+      type: object
+      properties:
+        templates:
+          type: array
+          items:
+            type: object
+            properties:
+              templateId:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
 
     ErrorResponse:
       type: object
