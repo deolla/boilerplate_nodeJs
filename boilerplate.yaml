@@ -1,440 +1,351 @@
 openapi: 3.0.0
 info:
-  title: User and Organisation Management API
+  title: Authentication API
   version: 1.0.0
-  description: API for managing users, organisations, settings, and profile.
-
+  license:
+    name: MIT
+    url: https://example.com/license
 servers:
-  - url: https://api.example.com/v1
-    description: Production server
-
+  - url: https://example.com
+    description: Local server
 paths:
-  /users:
-    get:
-      summary: Get a list of users
-      responses:
-        "200":
-          description: List of users
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserListResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /users/{userId}:
-    get:
-      summary: Get a user's profile
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: User profile
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-    put:
-      summary: Update a user's profile
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateUserProfile"
-      responses:
-        "200":
-          description: User profile updated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserResponse"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /organisations:
+  # Register and login routes using the default email and password, social accounts, and magic links
+  /auth/register:
     post:
-      summary: Create a new organisation
+      summary: Register a new user
+      operationId: registerUser
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateOrganisation"
-      responses:
-        "201":
-          description: Organisation created successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OrganisationResponse"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-    get:
-      summary: Get a list of organisations
-      responses:
-        "200":
-          description: List of organisations
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OrganisationListResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /organisations/{orgId}:
-    get:
-      summary: Get an organisation's details
-      parameters:
-        - name: orgId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Organisation details
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OrganisationDetails"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /organisations/{orgId}/users:
-    post:
-      summary: Add a user to an organisation
-      parameters:
-        - name: orgId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AddUserToOrganisation"
-      responses:
-        "201":
-          description: User added to organisation successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OrganisationUserResponse"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Organisation or user not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /settings:
-    get:
-      summary: Get settings
-      responses:
-        "200":
-          description: Settings data
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SettingsResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-    put:
-      summary: Update settings
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateSettings"
-      responses:
-        "200":
-          description: Settings updated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SettingsResponse"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /export-data:
-    get:
-      summary: Export user data
-      responses:
-        "200":
-          description: User data export initiated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ExportDataResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-components:
-  schemas:
-    ApiResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        message:
-          type: string
-        data:
-          type: object
-
-    CreateOrganisation:
-      type: object
-      properties:
-        name:
-          type: string
-      required:
-        - name
-
-    AddUserToOrganisation:
-      type: object
-      properties:
-        userId:
-          type: string
-      required:
-        - userId
-
-    UpdateUserProfile:
-      type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        phone:
-          type: string
-
-    UpdateSettings:
-      type: object
-      properties:
-        setting1:
-          type: string
-        setting2:
-          type: string
-
-    UserResponse:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/ApiResponse"
-        - type: object
-          properties:
-            data:
               type: object
               properties:
-                userId:
-                  type: string
-                firstName:
-                  type: string
-                lastName:
-                  type: string
                 email:
                   type: string
-                phone:
+                  format: email
+                password:
                   type: string
+      responses:
+        '200':
+          description: User registered successfully
+        '400':
+          description: Bad request
 
-    OrganisationDetails:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/ApiResponse"
-        - type: object
-          properties:
-            data:
+  /auth/login:
+    post:
+      summary: Login a user
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               type: object
               properties:
-                orgId:
+                email:
                   type: string
-                name:
+                  format: email
+                password:
                   type: string
-                description:
-                  type: string
+      responses:
+        '200':
+          description: User logged in successfully
+        '401':
+          description: Invalid credentials
 
-    OrganisationResponse:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/ApiResponse"
-        - type: object
-          properties:
-            data:
+  /auth/social/{provider}:
+    get:
+      summary: Social authentication
+      operationId: socialAuth
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [google, facebook, twitter]
+      responses:
+        '200':
+          description: Social authentication success
+        '400':
+          description: Social authentication failed
+
+  /auth/magic-link:
+    post:
+      summary: Send magic link
+      operationId: sendMagicLink
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               type: object
               properties:
-                orgId:
+                email:
                   type: string
-                name:
-                  type: string
-                description:
-                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Magic link sent
+        '400':
+          description: Bad request
 
-    Organisation:
-      type: object
-      properties:
-        orgId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-
-    OrganisationListResponse:
-      type: object
-      properties:
-        message:
-          type: string
-        status:
-          type: string
-        data:
-          type: array
-          items:
-            $ref: "#/components/schemas/Organisation"
-
-    OrganisationUserResponse:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/ApiResponse"
-        - type: object
-          properties:
-            data:
+  /auth/magic-link/verify:
+    post:
+      summary: Verify magic link
+      operationId: verifyMagicLink
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               type: object
               properties:
-                orgId:
+                token:
                   type: string
-                userId:
-                  type: string
+      responses:
+        '200':
+          description: Magic link verified
+        '400':
+          description: Bad request
 
-    User:
-      type: object
-      properties:
-        userId:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        phone:
-          type: string
-
-    UserListResponse:
-      type: object
-      properties:
-        message:
-          type: string
-        status:
-          type: string
-        data:
-          type: array
-          items:
-            $ref: "#/components/schemas/User"
-
-    SettingsResponse:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/ApiResponse"
-        - type: object
-          properties:
-            data:
+  /auth/change-password:
+    post:
+      summary: Change user password
+      operationId: changePassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               type: object
               properties:
-                setting1:
+                oldPassword:
                   type: string
-                setting2:
+                newPassword:
                   type: string
+      responses:
+        '200':
+          description: Password changed successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
 
-    ExportDataResponse:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/ApiResponse"
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                $ref: "#/components/schemas/User"
+  # payment methods and routes
+  /payments/stripe:
+    post:
+      summary: Process payment via Stripe
+      operationId: processStripePayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                currency:
+                  type: string
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Payment successful
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
 
-    ErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        message:
-          type: string
-        statusCode:
-          type: integer
-        data:
-          type: object
-          nullable: true
+  /payments/flutterwave:
+    post:
+      summary: Process payment via Flutterwave
+      operationId: processFlutterwavePayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                currency:
+                  type: string
+                tx_ref:
+                  type: string
+                redirect_url:
+                  type: string
+                payment_type:
+                  type: string
+      responses:
+        '200':
+          description: Payment successful
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /payments/lemonsqueezy:
+    post:
+      summary: Process payment via LemonSqueezy
+      operationId: processLemonSqueezyPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                currency:
+                  type: string
+                reference:
+                  type: string
+      responses:
+        '200':
+          description: Payment successful
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /content/edit:
+    put:
+      summary: Edit content
+      operationId: editContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contentId:
+                  type: string
+                newContent:
+                  type: string
+      responses:
+        '200':
+          description: Content edited successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+  /content:
+    post:
+      summary: Create content
+      operationId: createContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+      responses:
+        '201':
+          description: Content created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+    get:
+      summary: Get all content
+      operationId: getAllContent
+      responses:
+        '200':
+          description: Content retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    body:
+                      type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /content/{contentId}:
+    get:
+      summary: Get content by ID
+      operationId: getContentById
+      parameters:
+        - name: contentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Content retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  body:
+                    type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Content not found
+
+  # Add a new path for getting chart data
+  /chart:
+    get:
+      summary: Get chart data
+      operationId: getChartData
+      responses:
+        '200':
+          description: Chart data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chartData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                        y:
+                          type: number
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
