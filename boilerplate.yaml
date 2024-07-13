@@ -9,8 +9,10 @@ servers:
   - url: https://example.com
     description: Local server
 paths:
+  # Register and login routes using the default email and password, social accounts, and magic links
   /auth/register:
     post:
+      tags: [Authentication]
       summary: Register a new user
       operationId: registerUser
       requestBody:
@@ -26,13 +28,14 @@ paths:
                 password:
                   type: string
       responses:
-        '200':
+        "200":
           description: User registered successfully
-        '400':
+        "400":
           description: Bad request
 
   /auth/login:
     post:
+      tags: [Authentication]
       summary: Login a user
       operationId: loginUser
       requestBody:
@@ -48,13 +51,14 @@ paths:
                 password:
                   type: string
       responses:
-        '200':
+        "200":
           description: User logged in successfully
-        '401':
+        "401":
           description: Invalid credentials
 
   /auth/social/{provider}:
     get:
+      tags: [Authentication]
       summary: Social authentication
       operationId: socialAuth
       parameters:
@@ -65,13 +69,14 @@ paths:
             type: string
             enum: [google, facebook, twitter]
       responses:
-        '200':
+        "200":
           description: Social authentication success
-        '400':
+        "400":
           description: Social authentication failed
 
   /auth/magic-link:
     post:
+      tags: [Authentication]
       summary: Send magic link
       operationId: sendMagicLink
       requestBody:
@@ -85,13 +90,14 @@ paths:
                   type: string
                   format: email
       responses:
-        '200':
+        "200":
           description: Magic link sent
-        '400':
+        "400":
           description: Bad request
 
   /auth/magic-link/verify:
     post:
+      tags: [Authentication]
       summary: Verify magic link
       operationId: verifyMagicLink
       requestBody:
@@ -104,13 +110,14 @@ paths:
                 token:
                   type: string
       responses:
-        '200':
+        "200":
           description: Magic link verified
-        '400':
+        "400":
           description: Bad request
 
   /auth/change-password:
     post:
+      tags: [Authentication]
       summary: Change user password
       operationId: changePassword
       requestBody:
@@ -125,15 +132,17 @@ paths:
                 newPassword:
                   type: string
       responses:
-        '200':
+        "200":
           description: Password changed successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-  # Payment methods and responses
+
+  # payment methods and routes
   /payments/stripe:
     post:
+      tags: [Payment]
       summary: Process payment via Stripe
       operationId: processStripePayment
       requestBody:
@@ -150,15 +159,16 @@ paths:
                 token:
                   type: string
       responses:
-        '200':
+        "200":
           description: Payment successful
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
 
   /payments/flutterwave:
     post:
+      tags: [Payment]
       summary: Process payment via Flutterwave
       operationId: processFlutterwavePayment
       requestBody:
@@ -179,15 +189,16 @@ paths:
                 payment_type:
                   type: string
       responses:
-        '200':
+        "200":
           description: Payment successful
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
 
   /payments/lemonsqueezy:
     post:
+      tags: [Payment]
       summary: Process payment via LemonSqueezy
       operationId: processLemonSqueezyPayment
       requestBody:
@@ -204,15 +215,16 @@ paths:
                 reference:
                   type: string
       responses:
-        '200':
+        "200":
           description: Payment successful
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-  # Content edit details for the application and the API
+
   /content/edit:
     put:
+      tags: [Content]
       summary: Edit content
       operationId: editContent
       requestBody:
@@ -227,14 +239,15 @@ paths:
                 newContent:
                   type: string
       responses:
-        '200':
+        "200":
           description: Content edited successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
   /content:
     post:
+      tags: [Content]
       summary: Create content
       operationId: createContent
       requestBody:
@@ -249,18 +262,19 @@ paths:
                 body:
                   type: string
       responses:
-        '201':
+        "201":
           description: Content created successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
 
     get:
+      tags: [Content]
       summary: Get all content
       operationId: getAllContent
       responses:
-        '200':
+        "200":
           description: Content retrieved successfully
           content:
             application/json:
@@ -275,13 +289,14 @@ paths:
                       type: string
                     body:
                       type: string
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
 
   /content/{contentId}:
     get:
+      tags: [Content]
       summary: Get content by ID
       operationId: getContentById
       parameters:
@@ -291,7 +306,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Content retrieved successfully
           content:
             application/json:
@@ -304,19 +319,21 @@ paths:
                     type: string
                   body:
                     type: string
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Content not found
-  # Chart data endpoints
+
+  # Add a new path for getting chart data
   /chart:
     get:
+      tags: [Chart]
       summary: Get chart data
       operationId: getChartData
       responses:
-        '200':
+        "200":
           description: Chart data retrieved successfully
           content:
             application/json:
@@ -332,12 +349,221 @@ paths:
                           type: number
                         y:
                           type: number
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
 
+  /organisations/{orgId}/invite:
+    post:
+      tags: [Organisations]
+      summary: Generate an invite link
+      description: Creates an invite link for a user
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  description: User email
+      responses:
+        200:
+          description: Invite link generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  link:
+                    type: string
+                    description: Invite link
+                  status:
+                    type: boolean
+                  expirationDate:
+                    type: string
+                    description: when the invitation will expire
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+        401:
+          description: Unauthorized access to invite a user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Don't have the permission to add a user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # contact form
+  /organisations/{orgId}/contact:
+    post:
+      tags: [Organisations]
+      summary: contact an organisations
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: janedoe@domain.com
+                name:
+                  type: string
+                  example: Jane Doe
+                message:
+                  type: string
+      responses:
+        201:
+          description: Contact form submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Details sent successfully
+                  status:
+                    type: boolean
+        400:
+          description: Request body missing a required field, or contains an invalid data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: The organisation you're trying to contact does not exist
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # dashboard
+  /dashboard:
+    get:
+      tags: [Dashboard]
+      summary: Fetch dashboard data
+      responses:
+        200:
+          description: get an authenticated user dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardResponse"
+        401:
+          description: Unauthorized request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: boolean
+          example: false
+    DashboardResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+            photo_url:
+              type: string
+            verified:
+              type: boolean
+        organisations:
+          description: organisations the user belongs to
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+        active_organisation:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            description:
+              type: string
+        notifications:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+              is_read:
+                type: boolean
+                example: false
+        invitations:
+          type: array
+          items:
+            type: object
+            properties:
+              inviter:
+                type: object
+              organisation:
+                type: object
+              expirationDate:
+                type: string
+              status:
+                type: string
+                enum:
+                  - pending
+                  - accepted
+                  - denied
+                  - revoked
+                description: the invitation status
+
   securitySchemes:
     bearerAuth:
       type: http
