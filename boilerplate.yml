@@ -43,6 +43,9 @@ paths:
                     description: Invite link
                   status:
                     type: boolean
+                  expirationDate:
+                    type: string
+                    description: when the invitation will expire
         400:
           description: Invalid request
           content:
@@ -56,6 +59,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Don't have the permission to add a user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
         500:
           description: Internal server error
           content:
@@ -113,6 +123,23 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+# dashboard
+  /dashboard:
+    get:
+      summary: Fetch dashboard data
+      responses:
+        200:
+          description: get an authenticated user dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardResponse"
+        401:
+          description: Unauthorized request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 
 components:
@@ -125,4 +152,73 @@ components:
         status:
           type: boolean
           example: false
+    DashboardResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+            photo_url:
+              type: string
+            verified:
+              type: boolean
+        organisations:
+          description: organisations the user belongs to
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+        active_organisation:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            description:
+              type: string
+        notifications:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+              is_read:
+                type: boolean
+                example: false
+        invitations:
+          type: array
+          items:
+            type: object
+            properties:
+              inviter:
+                type: object
+              organisation:
+                type: object
+              expirationDate:
+                type: string
+              status:
+                type: string
+                enum:
+                  - pending
+                  - accepted
+                  - denied
+                  - revoked
+                description: the invitation status
+
+          
+
+              
+              
 
