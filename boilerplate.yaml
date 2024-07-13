@@ -1,0 +1,440 @@
+openapi: 3.0.0
+info:
+  title: User and Organisation Management API
+  version: 1.0.0
+  description: API for managing users, organisations, settings, and profile.
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+
+paths:
+  /users:
+    get:
+      summary: Get a list of users
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserListResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users/{userId}:
+    get:
+      summary: Get a user's profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      summary: Update a user's profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserProfile"
+      responses:
+        "200":
+          description: User profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /organisations:
+    post:
+      summary: Create a new organisation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrganisation"
+      responses:
+        "201":
+          description: Organisation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganisationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      summary: Get a list of organisations
+      responses:
+        "200":
+          description: List of organisations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganisationListResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /organisations/{orgId}:
+    get:
+      summary: Get an organisation's details
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Organisation details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganisationDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /organisations/{orgId}/users:
+    post:
+      summary: Add a user to an organisation
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddUserToOrganisation"
+      responses:
+        "201":
+          description: User added to organisation successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganisationUserResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Organisation or user not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /settings:
+    get:
+      summary: Get settings
+      responses:
+        "200":
+          description: Settings data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SettingsResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      summary: Update settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSettings"
+      responses:
+        "200":
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SettingsResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /export-data:
+    get:
+      summary: Export user data
+      responses:
+        "200":
+          description: User data export initiated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportDataResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+
+    CreateOrganisation:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+
+    AddUserToOrganisation:
+      type: object
+      properties:
+        userId:
+          type: string
+      required:
+        - userId
+
+    UpdateUserProfile:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+
+    UpdateSettings:
+      type: object
+      properties:
+        setting1:
+          type: string
+        setting2:
+          type: string
+
+    UserResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                userId:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+
+    OrganisationDetails:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                orgId:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+
+    OrganisationResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                orgId:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+
+    Organisation:
+      type: object
+      properties:
+        orgId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+
+    OrganisationListResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Organisation"
+
+    OrganisationUserResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                orgId:
+                  type: string
+                userId:
+                  type: string
+
+    User:
+      type: object
+      properties:
+        userId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+
+    UserListResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+
+    SettingsResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                setting1:
+                  type: string
+                setting2:
+                  type: string
+
+    ExportDataResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/User"
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        statusCode:
+          type: integer
+        data:
+          type: object
+          nullable: true
