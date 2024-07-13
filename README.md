@@ -23,6 +23,119 @@
 |--- tsconfig.json
 ```
 
+# project_structure:
+
+- src:
+  - controllers
+  - database
+  - interfaces
+  - middlewares
+  - routes
+  - services
+  - utils
+  - server.ts
+- .env
+- app.ts
+- .gitignore
+- package.json
+- tsconfig.json
+- README.md
+- boilerplate.yaml
+
+_./src/controllers_:
+
+- description: Contains functions that handles http request and response for the application.
+- example_files:
+  - auth.controller.ts
+  - user.controller.ts
+
+_./src/database_:
+
+- description: Contains database connection and models.
+- example_files:
+  - db.ts
+  - user.model.ts
+
+_./src/interfaces_:
+
+- description: Contains interfaces for typescript types.
+- example_files:
+  - user.interface.ts
+
+_./src/middlewares_:
+
+- description: Contains middleware functions.
+- example_files:
+  - auth.middleware.ts
+
+_./src/routes_:
+
+- description: Contains route definitions.
+- example_files:
+  - auth.route.ts
+  - user.route.ts
+
+_./src/services_:
+
+- description: Contains business logic functions.
+- example_files:
+  - email.service.ts
+  - password.service.ts
+  - validate.service.ts
+
+_./src/utils_:
+
+- description: Contains utility functions.
+- example_files:
+  - error.util.ts
+  - response.util.ts
+  - token.util.ts
+
+_./src/server.ts_:
+
+- description: Entry point of the application
+- content: express server setup, body parser, routes, and server listen.
+
+_./.env_:
+
+- description: Environment variables for the application.
+- content: PORT=3000
+  MONGO_URI=mongodb://localhost:27017/boilerplate
+  JWT_SECRET=secret
+  JWT_EXPIRY=1d
+  EMAIL_SECRET=secret
+  EMAIL_EXPIRY=1d
+  GOOGLE_CLIENT_ID=google_client_id
+  GOOGLE_CLIENT_SECRET=google_client_secret
+  FACEBOOK_APP_ID=facebook_app_id
+  FACEBOOK_APP_SECRET=facebook_app_secret
+
+_./app.ts_:
+
+- description: Application entry point.
+- content: Importing server and database connection.
+
+_./.gitignore_:
+
+- description: Contains files and directories to be ignored by git.
+- content: node_modules
+  .env
+
+_./package.json_:
+
+- description: Configuration file for npm/yarn packages needed for the application.
+- content: Dependencies (dependencies and devDependencies), scripts for running the server, tests, and other tasks.
+
+_./tsconfig.json_:
+
+- description: Typescript configuration file.
+- content: Configuration for typescript compiler options.
+
+_./README.md_:
+
+- description: Contains information about the application, how to set up, run, and use the application.
+- content: Project title, description, installation, usage, endpoints, and other relevant information.
+
 ## Dependencies (Dev)
 
 - Node.js
