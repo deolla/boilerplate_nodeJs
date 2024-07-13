@@ -778,6 +778,8 @@ paths:
               properties:
                 message:
                   type: string
+                subject:
+                  type: string
               required:
                 - message
       responses:
@@ -796,7 +798,7 @@ paths:
 
   /cookies/gdpr:
     get:
-      tags: [Cookies]
+      tags: [Cookies (GDPR)]
       summary: Get GDPR cookies information
       description: Retrieve information about GDPR compliance and cookies usage.
       responses:
@@ -827,11 +829,8 @@ paths:
               properties:
                 email:
                   type: string
-                service:
-                  type: string
               required:
                 - email
-                - service
       responses:
         200:
           description: User added to the waitlist
@@ -1213,6 +1212,12 @@ components:
         status:
           type: string
         message:
+          type: string
+        gdprCookiesContent:
+          type: string
+        privacyPolicyContent:
+          type: string
+        aboutUsContent:
           type: string
 
     EmailTemplatesResponse:
