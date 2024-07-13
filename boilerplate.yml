@@ -62,7 +62,58 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-                
+  
+# contact form
+  /organisations/{orgId}/contact:
+    post:
+      summary: contact an organisations
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: janedoe@domain.com
+                name:
+                  type: string
+                  example: Jane Doe
+                message:
+                  type: string
+      responses:
+        201:
+          description: Contact form submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Details sent successfully
+                  status:
+                    type: boolean
+        400:
+          description: Request body missing a required field, or contains an invalid data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: The organisation you're trying to contact does not exist
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+
 
 components:
   schemas:
@@ -74,4 +125,4 @@ components:
         status:
           type: boolean
           example: false
-    
+
