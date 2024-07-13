@@ -1,0 +1,657 @@
+project_structure:
+  - src:
+      - controllers
+      - database
+      - interfaces
+      - middlewares
+      - routes
+      - services
+      - utils
+      - server.ts
+  - .env
+  - app.ts
+  - .gitignore
+  - package.json
+  - tsconfig.json
+  - README.md
+  - boilerplate.yaml
+
+./src/controllers:
+  - description: Contains functions that handles http request and response for the application.
+  - example_files:
+      - auth.controller.ts
+      - user.controller.ts
+
+./src/database:
+  - description: Contains database connection and models.
+  - example_files:
+      - db.ts
+      - user.model.ts
+
+./src/interfaces:
+  - description: Contains interfaces for typescript types.
+  - example_files:
+      - user.interface.ts
+
+./src/middlewares:
+  - description: Contains middleware functions.
+  - example_files:
+      - auth.middleware.ts
+
+./src/routes:
+  - description: Contains route definitions.
+  - example_files:
+      - auth.route.ts
+      - user.route.ts
+
+./src/services:
+  - description: Contains business logic functions.
+  - example_files:
+      - email.service.ts
+      - password.service.ts
+      - validate.service.ts
+
+./src/utils:
+  - description: Contains utility functions.
+  - example_files:
+      - error.util.ts
+      - response.util.ts
+      - token.util.ts
+
+./src/server.ts:
+  - description: Entry point of the application
+  - content: express server setup, body parser, routes, and server listen.
+
+./.env:
+  - description: Environment variables for the application.
+  - content: PORT=3000
+      MONGO_URI=mongodb://localhost:27017/boilerplate
+      JWT_SECRET=secret
+      JWT_EXPIRY=1d
+      EMAIL_SECRET=secret
+      EMAIL_EXPIRY=1d
+      GOOGLE_CLIENT_ID=google_client_id
+      GOOGLE_CLIENT_SECRET=google_client_secret
+      FACEBOOK_APP_ID=facebook_app_id
+      FACEBOOK_APP_SECRET=facebook_app_secret
+
+./app.ts:
+  - description: Application entry point.
+  - content: Importing server and database connection.
+
+./.gitignore:
+  - description: Contains files and directories to be ignored by git.
+  - content: node_modules
+      .env
+
+./package.json:
+  - description: Configuration file for npm/yarn packages needed for the application.
+  - content: Dependencies (dependencies and devDependencies), scripts for running the server, tests, and other tasks.
+
+./tsconfig.json:
+  - description: Typescript configuration file.
+  - content: Configuration for typescript compiler options.
+
+./README.md:
+  - description: Contains information about the application, how to set up, run, and use the application.
+  - content: Project title, description, installation, usage, endpoints, and other relevant information.
+
+authentication:
+  standard:
+    endpoints:
+      login:
+        method: POST
+        path: /auth/login
+        description: Endpoint for standard username/email and password login.
+        request:
+          body:
+            email: string
+            password: string
+        responses:
+          200:
+            description: Successful login
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        token:
+                          type: string
+                        email:
+                          type: string
+                        createdAt:
+                          type: string
+          400:
+            description: Bad request - Invalid credentials
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+      register:
+        method: POST
+        path: /auth/register
+        description: Endpoint for user registration.
+        request:
+          body:
+            name: string
+            email: string
+            password: string
+        responses:
+          201:
+            description: User successfully registered
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        createdAt:
+                          type: string
+          400:
+            description: Bad request - Invalid input data
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+  social:
+    endpoints:
+      googleLogin:
+        method: POST
+        path: /auth/login/google
+        description: Endpoint for login using Google OAuth.
+        request:
+          body:
+            accessToken: string
+        responses:
+          200:
+            description: Successful login via Google
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        createdAt:
+                          type: string
+          401:
+            description: Unauthorized - Invalid access token
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+      facebookLogin:
+        method: POST
+        path: /auth/login/facebook
+        description: Endpoint for login using Facebook OAuth.
+        request:
+          body:
+            accessToken: string
+        responses:
+          200:
+            description: Successful login via Facebook
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        createdAt:
+                          type: string
+          401:
+            description: Unauthorized - Invalid access token
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+  magicLink:
+    endpoints:
+      sendMagicLink:
+        method: POST
+        path: /auth/magic-link/send
+        description: Endpoint to send a magic link to user's email for login.
+        request:
+          body:
+            email: string
+        responses:
+          200:
+            description: Magic link sent successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+          400:
+            description: Bad request - Invalid email address
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+      verifyMagicLink:
+        method: POST
+        path: /auth/magic-link/verify
+        description: Endpoint to verify the magic link token.
+        request:
+          body:
+            token: string
+        responses:
+          200:
+            description: Magic link token verified successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        createdAt:
+                          type: string
+          401:
+            description: Unauthorized - Invalid or expired magic link token
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+
+# Payment methods and responses
+payments:
+  integrations:
+    stripe:
+      external: true
+      description: "Integration with Stripe for external payments."
+      endpoints:
+        createPaymentIntent:
+          method: POST
+          path: /api/payments/stripe/intent
+          description: "Endpoint to create a payment intent with Stripe."
+          request:
+            body:
+              amount: number
+              currency: string
+          responses:
+            200:
+              description: "Payment intent created successfully"
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      clientSecret:
+                        type: string
+            400:
+              description: "Bad request - Invalid payment data"
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+    flutterwave:
+      external: true
+      description: "Integration with Flutterwave for external payments."
+      endpoints:
+        initiatePayment:
+          method: POST
+          path: /api/payments/flutterwave/initiate
+          description: "Endpoint to initiate a payment with Flutterwave."
+          request:
+            body:
+              amount: number
+              currency: string
+              redirectUrl: string
+          responses:
+            200:
+              description: "Payment initiated successfully"
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      paymentUrl:
+                        type: string
+            400:
+              description: "Bad request - Invalid payment data"
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+    lemonSqueezy:
+      internal: true
+      description: "Integration with LemonSqueezy for internal payments."
+      endpoints:
+        processPayment:
+          method: POST
+          path: /api/payments/lemonsqueezy/process
+          description: "Endpoint to process a payment internally with LemonSqueezy."
+          request:
+            body:
+              amount: number
+              recipientId: string
+          responses:
+            200:
+              description: "Payment processed successfully"
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      transactionId:
+                        type: string
+            400:
+              description: "Bad request - Invalid payment data"
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+
+# Content edit details for the application and the API
+contentEditPage:
+  endpoints:
+    getContent:
+      method: GET
+      path: /api/content/{contentId}
+      description: "Endpoint to fetch content by ID for editing."
+      request:
+        params:
+          contentId:
+            description: "ID of the content to fetch."
+            type: string
+            required: true
+      responses:
+        200:
+          description: "Content fetched successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: "ID of the content."
+                  title:
+                    type: string
+                    description: "Title of the content."
+                  body:
+                    type: string
+                    description: "Body text of the content."
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: "Timestamp of content creation."
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: "Timestamp of last update to the content."
+        404:
+          description: "Content not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: "Error message indicating content was not found."
+
+    updateContent:
+      method: PUT
+      path: /api/content/{contentId}
+      description: "Endpoint to update content by ID."
+      request:
+        params:
+          contentId:
+            description: "ID of the content to update."
+            type: string
+            required: true
+        body:
+          type: object
+          properties:
+            title:
+              type: string
+              description: "New title for the content."
+            body:
+              type: string
+              description: "New body text for the content."
+          required:
+            - title
+            - body
+      responses:
+        200:
+          description: "Content updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "Success message indicating content was updated."
+        400:
+          description: "Bad request - Invalid content data."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: "Error message indicating invalid content data."
+        404:
+          description: "Content not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: "Error message indicating content was not found."
+
+    deleteContent:
+      method: DELETE
+      path: /api/content/{contentId}
+      description: "Endpoint to delete content by ID."
+      request:
+        params:
+          contentId:
+            description: "ID of the content to delete."
+            type: string
+            required: true
+      responses:
+        200:
+          description: "Content deleted successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "Success message indicating content was deleted."
+        404:
+          description: "Content not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: "Error message indicating content was not found."
+    createContent:
+      method: POST
+      path: /api/content/{contentId}
+      description: "Endpoint to create new content."
+      request:
+        body:
+          title:
+            type: string
+            description: "Title of the new content."
+          body:
+            type: string
+            description: "Body text of the new content."
+        responses:
+          201:
+            description: "Content created successfully."
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      description: "Success message indicating content was created."
+                    content:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: "ID of the new content."
+                        title:
+                          type: string
+                          description: "Title of the new content."
+                        body:
+                          type: string
+                          description: "Body text of the new content."
+                        createdAt:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of content creation."
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of last update to the content."
+          400:
+            description: "Bad request - Invalid content data."
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      description: "Error message indicating invalid content data."
+
+# Chart data endpoints
+chartPage:
+  endpoints:
+    getChartData:
+      method: GET
+      path: /api/chart/data
+      description: "Endpoint to fetch chart data with chart of data."
+      responses:
+        200:
+          description: "Chart data fetched successfully with chart of data."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  labels:
+                    type: array
+                    items:
+                      type: string
+                      description: "Labels for the chart of data."
+                  datasets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        label:
+                          type: string
+                          description: "Label for the dataset in the chart."
+                        data:
+                          type: array
+                          items:
+                            type: number
+                          description: "Data points for the dataset in the chart."
+                        backgroundColor:
+                          type: string
+                          description: "Background color for the dataset in the chart."
+                        borderColor:
+                          type: string
+                          description: "Border color for the dataset in the chart."
+        404:
+          description: "No chart data available."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: "Error message indicating no data is available."
