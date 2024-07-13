@@ -113,7 +113,6 @@ Before you begin, ensure you have the following installed on your machine:
 
 ## Contribution Guide
 
-Check the issues
 [Check here for the contributon guide](CONTRIBUTORS_GUIDE.md)
 
 ## Getting Started

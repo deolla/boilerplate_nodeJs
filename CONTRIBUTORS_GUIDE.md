@@ -1,20 +1,22 @@
 # Contribution Guide
 
-Thank you for considering contributing to [App Name]! We welcome all types of contributions, including bug reports, feature requests, documentation improvements, and code enhancements.
+Thank you for considering contributing to Logic Squad! We welcome all types of contributions, including bug reports, feature requests, documentation improvements, and code enhancements.
 
 ## Contribution Rules
 
-1. **Follow the Code of Conduct:** Please read and adhere to the [Code of Conduct](CODE_OF_CONDUCT.md).
+1. View the Issues: Check the existing issues to find something you can work on. This helps to avoid duplicate work and ensures that your contributions align with the project's needs. You can [view the issues here](https://github.com/deolla/boilerplate_nodeJs/issues).
 
-2. **Style Guide:** Ensure your code follows the project's coding style. This includes proper indentation, variable naming conventions, and inline comments where necessary.
+2. **Follow the Code of Conduct:** Please read and adhere to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-3. **Testing:** Make sure your changes are well-tested. Write unit tests for new functionality and run all tests to ensure nothing is broken.
+3. **Style Guide:** Ensure your code follows the project's coding style. This includes proper indentation, variable naming conventions, and inline comments where necessary.
 
-4. **Documentation:** Update or add documentation for any changes made. This includes comments in the code, updating README files, or any other relevant documentation.
+4. **Testing:** Make sure your changes are well-tested. Write unit tests for new functionality and run all tests to ensure nothing is broken.
 
-5. **Commit Messages:** Write clear, concise commit messages that accurately describe the changes made.
+5. **Documentation:** Update or add documentation for any changes made. This includes comments in the code, updating README files, or any other relevant documentation.
 
-6. **Review Feedback:** Be open to feedback and be ready to make additional changes to your PR based on the review.
+6. **Commit Messages:** Write clear, concise commit messages that accurately describe the changes made.
+
+7. **Review Feedback:** Be open to feedback and be ready to make additional changes to your PR based on the review.
 
 ---
 
