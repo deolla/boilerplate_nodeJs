@@ -4,7 +4,7 @@
 The purpose of this codebase is to show our [Entity Relation Diagram] ERD implementation for a boilerplate Schema as well as a standard api documentation following [OpenApi specification](https://swagger.io/specification/). We used [DBDiagram.io](DBDiagram.io) for the ERD. We created the OpenApi documentaion following RESTful Architecure. 
 
 ### DATABASE SCHEMA
-<img src="https://drive.google.com/file/d/1yStDDPv10mn9bMO7rZ3bo0WAoVF5wmo9/view?usp=sharing" />
+<img src="https://drive.google.com/file/d/1yStDDPv10mn9bMO7rZ3bo0WAoVF5wmo9/view?usp=sharing" alt="erd diagram" width="100%"/>
 
 ## Folder Structure
 
