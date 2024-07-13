@@ -1,8 +1,12 @@
-# [App Name] Integration Documentation
+# Logic Squad ERD and OpenApi Specs. Documentation
 
 ## Overview
 
-[Description]
+The purpose of this codebase is to show our [Entity Relation Diagram](https://app.swaggerhub.com/apis/BODUNRINDAVIDBOND/LOGIC-SQUAD-OPENAPI-SCEMA/1.0.0) implementation for a boilerplate Schema as well as a standard api documentation following [OpenApi specification](https://swagger.io/specification/). We used [DBDiagram.io](DBDiagram.io) for the ERD. We created the OpenApi documentaion following RESTful Architecure. You can check the OpenApi Schema Documentation link [here](https://app.swaggerhub.com/apis/BODUNRINDAVIDBOND/LOGIC-SQUAD-OPENAPI-SCEMA/1.0.0).
+
+### DATABASE SCHEMA
+
+<img src="public/logic-squad.png" alt="erd diagram" width="100%"/>
 
 ## Folder Structure
 
@@ -20,121 +24,30 @@
 |--- app.ts
 |--- .gitignore
 |--- package.json
+|--- README.md
+|--- boilerplate.yaml
 |--- tsconfig.json
 ```
 
-# project_structure:
+> Controllers: Contains functions that handles http request and response for the application
 
-- src:
-  - controllers
-  - database
-  - interfaces
-  - middlewares
-  - routes
-  - services
-  - utils
-  - server.ts
-- .env
-- app.ts
-- .gitignore
-- package.json
-- tsconfig.json
-- README.md
-- boilerplate.yaml
+> Database: Contains database connection and models for configuring the database and running migration
 
-_./src/controllers_:
+> Interfaces: Contains database connections and models
 
-- description: Contains functions that handles http request and response for the application.
-- example_files:
-  - auth.controller.ts
-  - user.controller.ts
+> Middlewares: Contains middleware functions
 
-_./src/database_:
+> Routes: Contains route definition
 
-- description: Contains database connection and models.
-- example_files:
-  - db.ts
-  - user.model.ts
+> Services: Contains the business logic
 
-_./src/interfaces_:
+> Utils: Contains utility function
 
-- description: Contains interfaces for typescript types.
-- example_files:
-  - user.interface.ts
+> server.ts: Starts the application server
 
-_./src/middlewares_:
+> .env: Contains the application configurations and secrets
 
-- description: Contains middleware functions.
-- example_files:
-  - auth.middleware.ts
-
-_./src/routes_:
-
-- description: Contains route definitions.
-- example_files:
-  - auth.route.ts
-  - user.route.ts
-
-_./src/services_:
-
-- description: Contains business logic functions.
-- example_files:
-  - email.service.ts
-  - password.service.ts
-  - validate.service.ts
-
-_./src/utils_:
-
-- description: Contains utility functions.
-- example_files:
-  - error.util.ts
-  - response.util.ts
-  - token.util.ts
-
-_./src/server.ts_:
-
-- description: Entry point of the application
-- content: express server setup, body parser, routes, and server listen.
-
-_./.env_:
-
-- description: Environment variables for the application.
-- content: PORT=3000
-  MONGO_URI=mongodb://localhost:27017/boilerplate
-  JWT_SECRET=secret
-  JWT_EXPIRY=1d
-  EMAIL_SECRET=secret
-  EMAIL_EXPIRY=1d
-  GOOGLE_CLIENT_ID=google_client_id
-  GOOGLE_CLIENT_SECRET=google_client_secret
-  FACEBOOK_APP_ID=facebook_app_id
-  FACEBOOK_APP_SECRET=facebook_app_secret
-
-_./app.ts_:
-
-- description: Application entry point.
-- content: Importing server and database connection.
-
-_./.gitignore_:
-
-- description: Contains files and directories to be ignored by git.
-- content: node_modules
-  .env
-
-_./package.json_:
-
-- description: Configuration file for npm/yarn packages needed for the application.
-- content: Dependencies (dependencies and devDependencies), scripts for running the server, tests, and other tasks.
-
-_./tsconfig.json_:
-
-- description: Typescript configuration file.
-- content: Configuration for typescript compiler options.
-
-_./README.md_:
-
-- description: Contains information about the application, how to set up, run, and use the application.
-- content: Project title, description, installation, usage, endpoints, and other relevant information.
+> app.ts: Defines the application entry point.
 
 ## Dependencies (Dev)
 
@@ -142,7 +55,18 @@ _./README.md_:
 - TypeScript
 - Express
 - ts-node-dev
-- [Other dependencies]
+- dotenv
+- jsonwebtoken
+- passport.js
+- nodemon
+- tsx
+- pg
+- jest
+- supertest
+- joi
+- cross-env
+- ts-jest
+- bcryptjs
 
 ## Getting Started
 
@@ -153,6 +77,8 @@ Before you begin, ensure you have the following installed on your machine:
 - [Git](https://git-scm.com/)
 
 ## Contribution Guide
+
+[Check here for the contributon guide](CONTRIBUTORS_GUIDE.md)
 
 ## Getting Started
 

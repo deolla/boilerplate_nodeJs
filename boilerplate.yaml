@@ -397,7 +397,7 @@ paths:
         "401":
           description: Unauthorized
 
-  /content/edit:
+  /contents/{id}:
     put:
       tags: [Content]
       summary: Edit content
@@ -409,8 +409,6 @@ paths:
             schema:
               type: object
               properties:
-                contentId:
-                  type: string
                 newContent:
                   type: string
       responses:
@@ -421,7 +419,7 @@ paths:
         "401":
           description: Unauthorized
 
-  /content:
+  /contents:
     post:
       tags: [Content]
       summary: Create content
@@ -470,7 +468,7 @@ paths:
         "401":
           description: Unauthorized
 
-  /content/{contentId}:
+  /contents/{contentId}:
     get:
       tags: [Content]
       summary: Get content by ID
