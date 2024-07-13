@@ -55,6 +55,7 @@ Fixes # (issue) [Tag the issue number here]
 David Oluwaseun Bodunrin
 Oluwaseyi Adeosun Esther
 Isiaq Ridwan Bukola
+Akanni Emmanuel Etooluwa
 
 ## Additional Context
 
