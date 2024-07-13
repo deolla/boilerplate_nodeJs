@@ -52,10 +52,11 @@ Fixes # (issue) [Tag the issue number here]
 
 ## Contributors
 
-David Oluwaseun Bodunrin
-Oluwaseyi Adeosun Esther
-Isiaq Ridwan Bukola
-Akanni Emmanuel Etooluwa
+- David Oluwaseun Bodunrin
+- Oluwaseyi Adeosun Esther
+- Isiaq Ridwan Bukola
+- Akanni Emmanuel Etooluwa
+- Divine Amunega
 
 ## Additional Context
 
