@@ -1,14 +1,14 @@
 openapi: 3.0.0
 info:
-  title: Authentication API
-  description: The API
+  title: Logic Squad API
+  description: API documentation
   version: 1.0.0
   license:
     name: MIT
     url: https://example.com/license
 servers:
-  - url: https://example.com
-    description: Local server
+  - url: https://example.com/v1
+    description: Production server
 paths:
   # Register and login routes using the default email and password, social accounts, and magic links
   /auth/register:
@@ -154,6 +154,7 @@ paths:
     get:
       tags: [User]
       summary: Get a list of users
+      operationId: getUsers
       responses:
         "200":
           description: List of users
@@ -172,6 +173,7 @@ paths:
     get:
       tags: [User]
       summary: Get a user's details
+      operationId: getUserDetails
       parameters:
         - name: userId
           in: path
@@ -194,6 +196,7 @@ paths:
     put:
       tags: [User]
       summary: Update a user's profile
+      operationId: updateUserProfile
       parameters:
         - name: userId
           in: path
@@ -225,6 +228,91 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+  /users/{userId}/data:
+    get:
+      tags: [User]
+      summary: List all user's data
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: string
+          required: true
+          description: User ID of the user to get the data
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search Query to query the data from
+          required: false
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort Query to sort the data in a specified order
+          required: false
+      responses:
+        "200":
+          description: A list of user's data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserdataArr"
+        "404":
+          description: User not found
+
+  /users/{userId}/export:
+    post:
+      tags: [User]
+      summary: Request a data export
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the user requesting the data export
+      responses:
+        "202":
+          description: Data export requested successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportRequestResponse"
+        "400":
+          description: Invalid user ID
+        "404":
+          description: User not found
+
+  /users/{userId}/export/{exportId}:
+    get:
+      tags: [User]
+      summary: Download the exported data
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+        - name: exportId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the export request
+      responses:
+        "200":
+          description: Export file ready for download
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportFile"
+        "404":
+          description: Export file not found
 
   # payment methods and routes
   /payments/stripe:
@@ -332,6 +420,7 @@ paths:
           description: Bad request
         "401":
           description: Unauthorized
+
   /content:
     post:
       tags: [Content]
@@ -443,8 +532,10 @@ paths:
 
   /organisations:
     post:
+      operationId: createOrganisation
       tags: [Organisations]
       summary: Create a new organisation
+      #operationId: createOrganisation
       requestBody:
         required: true
         content:
@@ -467,6 +558,7 @@ paths:
     get:
       tags: [Organisations]
       summary: Get a list of organisations
+      operationId: getOrganisations
       responses:
         "200":
           description: List of organisations
@@ -485,6 +577,7 @@ paths:
     get:
       tags: [Organisations]
       summary: Get an organisation's details
+      operationId: getOrganisationDetails
       parameters:
         - name: orgId
           in: path
@@ -509,6 +602,7 @@ paths:
     post:
       tags: [Organisations]
       summary: Add a user to an organisation
+      operationId: addUserToOrganisation
       parameters:
         - name: orgId
           in: path
@@ -545,6 +639,7 @@ paths:
     post:
       tags: [Organisations]
       summary: Generate an invite link
+      operationId: generateInviteLink
       description: Creates an invite link for a user
       parameters:
         - name: orgId
@@ -611,6 +706,7 @@ paths:
     post:
       tags: [Organisations]
       summary: contact an organisations
+      operationId: contactOrganisation
       parameters:
         - name: orgId
           in: path
@@ -662,6 +758,7 @@ paths:
     get:
       tags: [Dashboard]
       summary: Fetch dashboard data
+      operationId: getDashboardData
       responses:
         200:
           description: get an authenticated user dashboard data
@@ -680,6 +777,7 @@ paths:
     get:
       tags: [Settings]
       summary: Get settings
+      operationId: getSettings
       responses:
         "200":
           description: Settings data
@@ -696,6 +794,7 @@ paths:
     put:
       tags: [Settings]
       summary: Update settings
+      operationId: updateSettings
       requestBody:
         required: true
         content:
@@ -726,6 +825,7 @@ paths:
     get:
       tags: [Export]
       summary: Export user data
+      operationId: exportUserData
       responses:
         "200":
           description: User data export initiated
@@ -744,6 +844,7 @@ paths:
     post:
       tags: [Messaging]
       summary: Send email using default template and background process
+      operationId: sendEmail
       requestBody:
         required: true
         content:
@@ -768,6 +869,7 @@ paths:
     post:
       tags: [Notifications]
       summary: Send a notification
+      operationId: sendNotification
       description: Endpoint to send notifications via email or other channels.
       requestBody:
         required: true
@@ -800,6 +902,7 @@ paths:
     get:
       tags: [Cookies (GDPR)]
       summary: Get GDPR cookies information
+      operationId: getGDPRCookies
       description: Retrieve information about GDPR compliance and cookies usage.
       responses:
         200:
@@ -820,6 +923,7 @@ paths:
       tags: [Waitlist]
       summary: Join the waitlist
       description: Register a user to a waitlist for a service or feature.
+      operationId: joinWaitlist
       requestBody:
         required: true
         content:
@@ -884,6 +988,7 @@ paths:
       summary: Get email templates
       security: [{ bearerAuth: [] }]
       description: Retrieve email templates managed by the Superadmin.
+      operationId: getEmailTemplates
       responses:
         200:
           description: Email templates retrieved successfully
@@ -897,6 +1002,175 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+  /blogs:
+    get:
+      tags: [Blog]
+      summary: "View first 20 blog posts"
+      parameters:
+        - name: sort
+          in: query
+          required: false
+          description: Sort query to sort blog posts in a specified order
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search query to find blog posts according to a certain query
+      responses:
+        "200":
+          description: A List of the first 20 blog posts in the platform
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BlogArr"
+        "404":
+          description: No blog posts found
+    post:
+      tags: [Blog]
+      summary: Add a new blog post to the platform
+      description: Add a new post to the platform
+      requestBody:
+        description: Blog Post object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewBlogPost"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+          description: The Created Blog Post
+
+  /blogs/{blogId}:
+    get:
+      tags: [Blog]
+      summary: View a Singular Blog Post
+      parameters:
+        - name: blogId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: A singluar blog post found by the blog ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+    put:
+      tags: [Blog]
+      summary: Update a blog post in the platform
+      description: Update a post in the platform
+      requestBody:
+        description: Blog Post object to be Updateed
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewBlogPost"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+          description: The Created Blog Post
+
+  /squeeze:
+    post:
+      summary: A route that collects emails for marketing purposes
+      description: Add a new email to the sqeeze
+      requestBody:
+        description: Email To be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitEmail"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+          description: The Created Email
+    get:
+      summary: A route that returns all the submitted email addresses
+      responses:
+        "200":
+          description: A list of emails to market to
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListEmails"
+
+  /invites:
+    post:
+      tags: [Invite]
+      summary: Generate an invite link
+      requestBody:
+        description: User information to generate an invite link
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InviteRequest"
+      responses:
+        "201":
+          description: Invite link generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InviteResponse"
+        "400":
+          description: Invalid input
+    get:
+      summary: Get all invites sent by the user
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of invites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invite"
+
+  /invites/{inviteId}/accept:
+    post:
+      tags: [Invite]
+      summary: Accept an invite
+      parameters:
+        - name: inviteId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Invite accepted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AcceptInviteResponse"
+        "404":
+          description: Invite not found
 
 components:
   securitySchemes:
@@ -1197,6 +1471,14 @@ components:
         messageId:
           type: string
 
+    # WaitlistRequest:
+    #   type: object
+    #   properties:
+    #     email:
+    #       type: string
+    #     name:
+    #       type: string
+
     WaitlistResponse:
       type: object
       properties:
@@ -1205,17 +1487,17 @@ components:
         message:
           type: string
 
-    EmailTemplatesListResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          templateId:
-            type: string
-          name:
-            type: string
-          description:
-            type: string
+    # EmailTemplatesListResponse:
+    #   type: array
+    #   items:
+    #     type: object
+    #     properties:
+    #       templateId:
+    #         type: string
+    #       name:
+    #         type: string
+    #       description:
+    #         type: string
 
     NotificationResponse:
       type: object
@@ -1260,6 +1542,132 @@ components:
                 type: string
               description:
                 type: string
+    UserdataArr:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: number
+          name:
+            type: string
+          data:
+            type: string
+
+    BlogArr:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: number
+          name:
+            type: string
+          dateCreated:
+            type: string
+          supportText:
+            type: "string"
+
+    BlogPost:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    NewBlogPost:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
+    SubmitEmail:
+      type: object
+      properties:
+        email:
+          type: string
+    ListEmails:
+      type: array
+      items:
+        type: object
+        properties:
+          email:
+            type: string
+    InviteRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+        email:
+          type: string
+          format: email
+          example: invitee@example.com
+    InviteResponse:
+      type: object
+      properties:
+        inviteLink:
+          type: string
+          example: "https://example.com/invite/12345"
+    Invite:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        email:
+          type: string
+          format: email
+        inviteLink:
+          type: string
+        status:
+          type: string
+          enum: [pending, accepted, expired]
+        sentAt:
+          type: string
+          format: date-time
+        acceptedAt:
+          type: string
+          format: date-time
+          nullable: true
+    AcceptInviteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Invite accepted successfully!"
+    ExportRequestResponse:
+      type: object
+      properties:
+        exportId:
+          type: string
+          example: "gioh89uiorjktg8y9iuo"
+        message:
+          type: string
+          example: "Your data export request has been received. You will be notified when it's ready."
+    ExportFile:
+      type: object
+      properties:
+        fileUrl:
+          type: string
+          example: "https://apilink.com/exports/838383y3hr9.zip"
+        expiresAt:
+          type: string
+          format: date-time
+          example: "A date time"
 
 security:
   - bearerAuth: []
