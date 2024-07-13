@@ -18,7 +18,7 @@ We utilized [DBDiagram.io](DBDiagram.io) to create the ERD, which visually repre
 
 ### API Documentation
 
-The API documentation follows RESTful architecture principles and has been meticulously crafted according to the [OpenApi specification](https://swagger.io/specification/). This ensures clarity, consistency, and adherence to industry standards. You can explore the OpenAPI Schema Documentation [here](https://app.swaggerhub.com/apis/BODUNRINDAVIDBOND/LOGIC-SQUAD-OPENAPI-SCEMA/1.0.0).
+The API documentation follows RESTful architecture principles and has been meticulously crafted according to the [OpenApi specification](https://swagger.io/specification/). This ensures clarity, consistency, and adherence to industry standards. You can explore the OpenAPI Schema Documentation boilerplate [here](https://app.swaggerhub.com/apis/BODUNRINDAVIDBOND/LOGIC-SQUAD-OPENAPI-SCEMA/1.0.0).
 
 ### Folder Structure
 
