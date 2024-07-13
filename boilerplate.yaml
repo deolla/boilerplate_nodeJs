@@ -82,7 +82,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BlogPost"
-          description: The Created User
+          description: The Created Blog Post
 
   /blogs/{blogId}:
     get:
