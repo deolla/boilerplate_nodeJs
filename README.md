@@ -1,4 +1,4 @@
-# Logic Squad ERD and OpenApi Spec Documentation
+# Logic Squad ERD and OpenApi Specs. Documentation
 
 ## Overview
 The purpose of this codebase is to show our [Entity Relation Diagram] ERD implementation for a boilerplate Schema as well as a standard api documentation following [OpenApi specification](https://swagger.io/specification/). We used [DBDiagram.io](DBDiagram.io) for the ERD. We created the OpenApi documentaion following RESTful Architecure. 
