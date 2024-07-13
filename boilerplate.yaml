@@ -1,6 +1,7 @@
 openapi: 3.0.0
 info:
   title: Authentication API
+  description: The API
   version: 1.0.0
   license:
     name: MIT
@@ -22,6 +23,12 @@ paths:
             schema:
               type: object
               properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                phone:
+                  type: string
                 email:
                   type: string
                   format: email
@@ -30,6 +37,10 @@ paths:
       responses:
         "200":
           description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
         "400":
           description: Bad request
 
@@ -139,6 +150,85 @@ paths:
         "401":
           description: Unauthorized
 
+  /users:
+    get:
+      tags: [User]
+      summary: Get a list of users
+      operationId: getUsers
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserListResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users/{userId}:
+    get:
+      tags: [User]
+      summary: Get a user's details
+      operationId: getUserDetails
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      tags: [User]
+      summary: Update a user's profile
+      operationId: updateUserProfile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/UpdateUserProfile"
+      responses:
+        "200":
+          description: User profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   # payment methods and routes
   /payments/stripe:
     post:
@@ -247,6 +337,7 @@ paths:
           description: Unauthorized
   /content:
     post:
+
       tags: [Content]
       summary: Create content
       operationId: createContent
@@ -354,10 +445,116 @@ paths:
         "401":
           description: Unauthorized
 
+  /organisations:
+    post:
+      operationId: createOrganisation
+      tags: [Organisations]
+      summary: Create a new organisation
+      #operationId: createOrganisation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrganisation"
+      responses:
+        "201":
+          description: Organisation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganisationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      tags: [Organisations]
+      summary: Get a list of organisations
+      operationId: getOrganisations
+      responses:
+        "200":
+          description: List of organisations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganisationListResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /organisations/{orgId}:
+    get:
+      tags: [Organisations]
+      summary: Get an organisation's details
+      operationId: getOrganisationDetails
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Organisation details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganisationDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /organisations/{orgId}/users:
+    post:
+      tags: [Organisations]
+      summary: Add a user to an organisation
+      operationId: addUserToOrganisation
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddUserToOrganisation"
+      responses:
+        "201":
+          description: User added to organisation successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganisationUserResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Organisation or user not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /organisations/{orgId}/invite:
     post:
       tags: [Organisations]
       summary: Generate an invite link
+      operationId: generateInviteLink
       description: Creates an invite link for a user
       parameters:
         - name: orgId
@@ -424,6 +621,7 @@ paths:
     post:
       tags: [Organisations]
       summary: contact an organisations
+      operationId: contactOrganisation
       parameters:
         - name: orgId
           in: path
@@ -475,6 +673,7 @@ paths:
     get:
       tags: [Dashboard]
       summary: Fetch dashboard data
+      operationId: getDashboardData
       responses:
         200:
           description: get an authenticated user dashboard data
@@ -489,16 +688,235 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /settings:
+    get:
+      tags: [Settings]
+      summary: Get settings
+      operationId: getSettings
+      responses:
+        "200":
+          description: Settings data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SettingsResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      tags: [Settings]
+      summary: Update settings
+      operationId: updateSettings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSettings"
+      responses:
+        "200":
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SettingsResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /export-data:
+    get:
+      tags: [Export]
+      summary: Export user data
+      operationId: exportUserData
+      responses:
+        "200":
+          description: User data export initiated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportDataResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /messaging/email:
+    post:
+      tags: [Messaging]
+      summary: Send email using default template and background process
+      operationId: sendEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmailMessage"
+      responses:
+        200:
+          description: Email sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailSentResponse"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /notifications:
+    post:
+      tags: [Notifications]
+      summary: Send a notification
+      operationId: sendNotification
+      description: Endpoint to send notifications via email or other channels.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                subject:
+                  type: string
+              required:
+                - message
+      responses:
+        200:
+          description: Notification sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationResponse"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /cookies/gdpr:
+    get:
+      tags: [Cookies (GDPR)]
+      summary: Get GDPR cookies information
+      operationId: getGDPRCookies
+      description: Retrieve information about GDPR compliance and cookies usage.
+      responses:
+        200:
+          description: GDPR cookies information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GDPRCookiesResponse"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /waitlist:
+    post:
+      tags: [Waitlist]
+      summary: Join the waitlist
+      description: Register a user to a waitlist for a service or feature.
+      operationId: joinWaitlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        200:
+          description: User added to the waitlist
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WaitlistResponse"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /superadmin/email-templates:
+    get:
+      tags: [Super Admin]
+      summary: Get email templates
+      description: Retrieve email templates managed by the Superadmin.
+      operationId: getEmailTemplates
+      responses:
+        200:
+          description: Email templates retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailTemplatesResponse"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+
     ErrorResponse:
       type: object
       properties:
         error:
           type: string
         status:
-          type: boolean
-          example: false
+          type: string
+        message:
+          type: string
+        statusCode:
+          type: integer
+        data:
+          type: object
+          nullable: true
+
     DashboardResponse:
       type: object
       properties:
@@ -564,11 +982,278 @@ components:
                   - revoked
                 description: the invitation status
 
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    CreateOrganisation:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+
+    AddUserToOrganisation:
+      type: object
+      properties:
+        userId:
+          type: string
+      required:
+        - userId
+
+    UpdateUserProfile:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        photoUrl:
+          type: string
+          format: binary
+
+    UpdateSettings:
+      type: object
+      properties:
+        setting1:
+          type: string
+        setting2:
+          type: string
+
+    UserResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                userId:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                photoUrl:
+                  type: string
+                  format: binary
+
+    OrganisationDetails:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                orgId:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+
+    OrganisationResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                orgId:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+
+    Organisation:
+      type: object
+      properties:
+        orgId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+
+    OrganisationListResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Organisation"
+
+    OrganisationUserResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                orgId:
+                  type: string
+                userId:
+                  type: string
+
+    User:
+      type: object
+      properties:
+        userId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+
+    UserListResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+
+    SettingsResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                setting1:
+                  type: string
+                setting2:
+                  type: string
+
+    ExportDataResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/User"
+
+    EmailMessage:
+      type: object
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+        subject:
+          type: string
+        content:
+          type: string
+
+    EmailSentResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        messageId:
+          type: string
+
+    # WaitlistRequest:
+    #   type: object
+    #   properties:
+    #     email:
+    #       type: string
+    #     name:
+    #       type: string
+
+    WaitlistResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+
+    # EmailTemplatesListResponse:
+    #   type: array
+    #   items:
+    #     type: object
+    #     properties:
+    #       templateId:
+    #         type: string
+    #       name:
+    #         type: string
+    #       description:
+    #         type: string
+
+    NotificationResponse:
+      type: object
+      properties:
+        notifications:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              message:
+                type: string
+              timestamp:
+                type: string
+
+    GDPRCookiesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        gdprCookiesContent:
+          type: string
+        privacyPolicyContent:
+          type: string
+        aboutUsContent:
+          type: string
+
+    EmailTemplatesResponse:
+      type: object
+      properties:
+        templates:
+          type: array
+          items:
+            type: object
+            properties:
+              templateId:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
 
 security:
   - bearerAuth: []
