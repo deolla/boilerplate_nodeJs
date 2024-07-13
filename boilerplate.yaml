@@ -845,10 +845,44 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /superadmin/email-templates:
+  /superadmin/email-template:
+    post:
+      tags: [Super Admin]
+      summary: Create a new email template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subject:
+                  type: string
+                content:
+                  type: string
+      responses:
+        200:
+          description: Email created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subject:
+                    type: string
+                  content:
+                    type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
     get:
       tags: [Super Admin]
       summary: Get email templates
+      security: [{ bearerAuth: [] }]
       description: Retrieve email templates managed by the Superadmin.
       responses:
         200:
@@ -1161,14 +1195,6 @@ components:
         status:
           type: string
         messageId:
-          type: string
-
-    WaitlistRequest:
-      type: object
-      properties:
-        email:
-          type: string
-        name:
           type: string
 
     WaitlistResponse:
