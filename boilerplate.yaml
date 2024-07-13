@@ -1,0 +1,201 @@
+openapi: 3.0.0
+info:
+  title: Boilerplate
+  version: 1.0.0
+  description: API boilerplate for common projects
+servers:
+  - url: https://boilerplateapi/api/v1
+paths:
+  /users/{userId}/data:
+    get:
+      summary: List all user's data
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: string
+          required: true
+          description: User ID of the user to get the data
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search Query to query the data from
+          required: false
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort Query to sort the data in a specified order
+          required: false
+      responses:
+        "200":
+          description: A list of user's data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserdataArr"
+        "404":
+          description: User not found
+  /blogs:
+    get:
+      summary: "View first 20 blog posts"
+      parameters:
+        - name: sort
+          in: query
+          required: false
+          description: Sort query to sort blog posts in a specified order
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search query to find blog posts according to a certain query
+      responses:
+        "200":
+          description: A List of the first 20 blog posts in the platform
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/BlogArr"
+        "404":
+          description: No blog posts found
+    post:
+      summary: Add a new blog post to the platform
+      description: Add a new post to the platform
+      requestBody:
+        description: Blog Post object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewBlogPost"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+          description: The Created Blog Post
+
+  /blogs/{blogId}:
+    get:
+      summary: View a Singular Blog Post
+      parameters:
+        - name: blogId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: A singluar blog post found by the blog ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+  /squeeze:
+    post:
+      summary: A route that collects emails for marketing purposes
+      description: Add a new email to the sqeeze
+      requestBody:
+        description: Email To be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitEmail"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+          description: The Created Email
+    get:
+      summary: A route that returns all the submitted email addresses
+      responses:
+        "200":
+          description: A list of emails to market to
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListEmails"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    UserdataArr:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: number
+          name:
+            type: string
+          data:
+            type: string
+    BlogArr:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: number
+          name:
+            type: string
+          dateCreated:
+            type: string
+          supportText:
+            type: "string"
+    BlogPost:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    NewBlogPost:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
+    SubmitEmail:
+      type: object
+      properties:
+        email:
+          type: string
+    ListEmails:
+      type: array
+      items:
+        type: object
+        properties:
+          email:
+            type: string
