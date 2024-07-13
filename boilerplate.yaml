@@ -100,6 +100,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BlogPost"
+  /squeeze:
+    post:
+      summary: A route that collects emails for marketing purposes
+      description: Add a new email to the sqeeze
+      requestBody:
+        description: Email To be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitEmail"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+          description: The Created Email
+    get:
+      summary: A route that returns all the submitted email addresses
+      responses:
+        "200":
+          description: A list of emails to market to
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListEmails"
+
 components:
   schemas:
     User:
@@ -159,3 +187,15 @@ components:
           type: string
         author:
           type: string
+    SubmitEmail:
+      type: object
+      properties:
+        email:
+          type: string
+    ListEmails:
+      type: array
+      items:
+        type: object
+        properties:
+          email:
+            type: string
