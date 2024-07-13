@@ -50,6 +50,14 @@ Fixes # (issue) [Tag the issue number here]
 
 ## Screenshots (if appropriate)
 
+## Contributors
+
+David Oluwaseun Bodunrin
+Oluwaseyi Adeosun Esther
+Isiaq Ridwan Bukola
+
 ## Additional Context
 
 Add any other context or screenshots about the pull request here.
+
+#
