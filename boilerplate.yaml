@@ -39,6 +39,67 @@ paths:
                   $ref: "#/components/schemas/UserdataArr"
         "404":
           description: User not found
+  /blogs:
+    get:
+      summary: "View first 20 blog posts"
+      parameters:
+        - name: sort
+          in: query
+          required: false
+          description: Sort query to sort blog posts in a specified order
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search query to find blog posts according to a certain query
+      responses:
+        "200":
+          description: A List of the first 20 blog posts in the platform
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/BlogArr"
+        "404":
+          description: No blog posts found
+    post:
+      summary: Add a new blog post to the platform
+      description: Add a new post to the platform
+      requestBody:
+        description: Blog Post object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewBlogPost"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+          description: The Created User
+
+  /blogs/{blogId}:
+    get:
+      summary: View a Singular Blog Post
+      parameters:
+        - name: blogId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: A singluar blog post found by the blog ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
 components:
   schemas:
     User:
@@ -59,3 +120,42 @@ components:
             type: string
           data:
             type: string
+    BlogArr:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: number
+          name:
+            type: string
+          dateCreated:
+            type: string
+          supportText:
+            type: "string"
+    BlogPost:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    NewBlogPost:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
