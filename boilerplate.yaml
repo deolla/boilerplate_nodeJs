@@ -994,7 +994,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#components/schemas/BlogArr"
+                  $ref: "#/components/schemas/BlogArr"
         "404":
           description: No blog posts found
     post:
@@ -1519,6 +1519,7 @@ components:
             type: string
           data:
             type: string
+
     BlogArr:
       type: array
       items:
@@ -1532,6 +1533,7 @@ components:
             type: string
           supportText:
             type: "string"
+
     BlogPost:
       type: object
       properties:
