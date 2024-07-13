@@ -1,0 +1,77 @@
+openapi: 3.0.0
+info:
+  title: Invite Link API
+  description: API for generating invite links
+  version: 1.0.0
+
+servers:
+  - url: https://www.example.com/api/v1
+    description: Production server
+
+paths:
+  /organisations/{orgId}/invite:
+    post:
+      summary: Generate an invite link
+      description: Creates an invite link for a user
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  description: User email
+      responses:
+        200:
+          description: Invite link generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  link:
+                    type: string
+                    description: Invite link
+                  status:
+                    type: boolean
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+                
+        401:
+          description: Unauthorized access to invite a user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+                
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: boolean
+          example: false
+    
