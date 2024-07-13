@@ -1,14 +1,26 @@
-# Logic Squad ERD and OpenApi Specs. Documentation
-
-## Overview
-
-The purpose of this codebase is to show our [Entity Relation Diagram](https://app.swaggerhub.com/apis/BODUNRINDAVIDBOND/LOGIC-SQUAD-OPENAPI-SCEMA/1.0.0) implementation for a boilerplate Schema as well as a standard api documentation following [OpenApi specification](https://swagger.io/specification/). We used [DBDiagram.io](DBDiagram.io) for the ERD. We created the OpenApi documentaion following RESTful Architecure. You can check the OpenApi Schema Documentation link [here](https://app.swaggerhub.com/apis/BODUNRINDAVIDBOND/LOGIC-SQUAD-OPENAPI-SCEMA/1.0.0).
-
-### DATABASE SCHEMA
-
 <img src="public/logic-squad.png" alt="erd diagram" width="100%"/>
 
-## Folder Structure
+<div align='center'> 
+  <strong> Logic Squad ERD and OpenApi Specs. Documentation </strong>
+</div>
+<div align="center"> 
+  The best code documentation and example showing the E.R.D and OpenAPI Schema. 
+</div>
+<br />
+
+## Introduction
+
+This repository showcases our implementation of an Entity-Relation Diagram (ERD) and standard API documentation adhering to the [OpenApi Specification](https://swagger.io/specification/).
+
+### Entity-Relation Diagram (ERD)
+
+We utilized [DBDiagram.io](DBDiagram.io) to create the ERD, which visually represent the database schema. You can view the ERD <img src="public/logic-squad.png" alt='ERD diagram' align='center'/>
+
+### API Documentation
+
+The API documentation follows RESTful architecture principles and has been meticulously crafted according to the [OpenApi specification](https://swagger.io/specification/). This ensures clarity, consistency, and adherence to industry standards. You can explore the OpenAPI Schema Documentation [here](https://app.swaggerhub.com/apis/BODUNRINDAVIDBOND/LOGIC-SQUAD-OPENAPI-SCEMA/1.0.0).
+
+### Folder Structure
 
 ```
 |--- src
@@ -29,27 +41,50 @@ The purpose of this codebase is to show our [Entity Relation Diagram](https://ap
 |--- tsconfig.json
 ```
 
-> Controllers: Contains functions that handles http request and response for the application
+<br/>
+<div> 
+<strong align='left'> Directory Descriptions </strong>
+</div>
+<li> Controllers: Contains functions that handles http request and response for the application </li>
 
-> Database: Contains database connection and models for configuring the database and running migration
+<li> Database: Contains database connection and models for configuring the database and running migration
+ </li>
+<li> Interfaces: Contains database connections and models
+ </li>
+<li> Middlewares: Contains middleware functions
+ </li>
+<li> Routes: Contains route definition
+ </li>
+<li> Services: Contains the business logic
+ </li>
 
-> Interfaces: Contains database connections and models
+<li> Utils: Contains utility function
+ </li>
+<li> server.ts: Starts the application server
+ </li>
+<li> .env: Contains the application configurations and secrets
+ </li>
+<li> app.ts: Defines the application entry point.
+ </li>
 
-> Middlewares: Contains middleware functions
+<br/>
+<div> 
+<strong>Root Files
+</strong>
+</div>
 
-> Routes: Contains route definition
+<li> .env: Stores environment variables and application secrets. </li>
+<li> app.ts: Main entry point for initializing the application.
+</li>
+<li> package.json: Lists project dependencies and scripts.
+ </li>
+<li> README.md: Provides an overview and documentation for the project.
+</li>
+<li> boilerplate.yaml: Defines the OpenAPI schema and documentation.
+ </li>
+<li> tsconfig.json: TypeScript configuration file. </li>
 
-> Services: Contains the business logic
-
-> Utils: Contains utility function
-
-> server.ts: Starts the application server
-
-> .env: Contains the application configurations and secrets
-
-> app.ts: Defines the application entry point.
-
-## Dependencies (Dev)
+### Dependencies (Dev)
 
 - Node.js
 - TypeScript
@@ -78,6 +113,7 @@ Before you begin, ensure you have the following installed on your machine:
 
 ## Contribution Guide
 
+Check the issues
 [Check here for the contributon guide](CONTRIBUTORS_GUIDE.md)
 
 ## Getting Started
