@@ -7,7 +7,7 @@ info:
     name: MIT
     url: https://example.com/license
 servers:
-  - url: https://example.com/v1
+  - url: https://example.com/api/v1
     description: Production server
 paths:
   # Register and login routes using the default email and password, social accounts, and magic links
@@ -949,10 +949,44 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /superadmin/email-templates:
+  /superadmin/email-template:
+    post:
+      tags: [Super Admin]
+      summary: Create a new email template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subject:
+                  type: string
+                content:
+                  type: string
+      responses:
+        200:
+          description: Email created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subject:
+                    type: string
+                  content:
+                    type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
     get:
       tags: [Super Admin]
       summary: Get email templates
+      security: [{ bearerAuth: [] }]
       description: Retrieve email templates managed by the Superadmin.
       operationId: getEmailTemplates
       responses:
@@ -1054,6 +1088,7 @@ paths:
 
   /squeeze:
     post:
+      tags: [Squeeze]
       summary: A route that collects emails for marketing purposes
       description: Add a new email to the sqeeze
       requestBody:
@@ -1071,6 +1106,7 @@ paths:
                 $ref: "#/components/schemas/BlogPost"
           description: The Created Email
     get:
+      tags: [Squeeze]
       summary: A route that returns all the submitted email addresses
       responses:
         "200":
@@ -1101,6 +1137,7 @@ paths:
         "400":
           description: Invalid input
     get:
+      tags: [Invite]
       summary: Get all invites sent by the user
       parameters:
         - name: userId
@@ -1137,6 +1174,40 @@ paths:
                 $ref: "#/components/schemas/AcceptInviteResponse"
         "404":
           description: Invite not found
+
+  /ai-sentiment:
+    post:
+      tags: [AI Integration]
+      summary: Analyze Sentiment
+      description: Analyzes sentiment of text input using AI.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: Text input to analyze sentiment.
+              required:
+                - text
+      responses:
+        "200":
+          description: Successful sentiment analysis
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sentiment:
+                    type: string
+                    enum: ["positive", "neutral", "negative"]
+                    description: Detected sentiment of the text.
+        "400":
+          description: Invalid request body or text format
+        "500":
+          description: Internal server error
 
 components:
   securitySchemes:
